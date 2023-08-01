@@ -7,7 +7,7 @@ type Address struct {
 	Phone int
 }
 
-// golang中空指针和类型断言使用细节
+// golang中空接口和类型断言使用细节
 func main() {
 	userinfo := make(map[string]interface{})
 	userinfo["username"] = "张三"
