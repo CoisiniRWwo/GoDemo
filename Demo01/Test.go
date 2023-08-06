@@ -2,38 +2,23 @@ package main
 
 import (
 	"fmt"
-	"io"
-	"os"
+	"github.com/gin-gonic/gin"
+	"time"
 )
 
-// 自己编写一个函数，接收两个文件路径 srcFileName dstFileName
-func CopyFile(dstFileName string, srcFileName string) (err error) {
-	source, _ := os.Open(srcFileName)
-	destination, _ := os.OpenFile(dstFileName, os.O_CREATE|os.O_WRONLY, 0666)
-	buf := make([]byte, 128)
-	for {
-		n, err := source.Read(buf)
-		if err != nil && err != io.EOF {
-			return err
-		}
-		if n == 0 {
-			break
-		}
-		if _, err := destination.Write(buf[:n]); err != nil {
-			return err
-		}
-	}
-	return
+func formatAsDate(t time.Time) string {
+	year, month, day := t.Date()
+	return fmt.Sprintf("%d/%02d/%02d", year, month, day)
 }
-
 func main() {
-	//调用 CopyFile 完成文件拷贝
-	srcFile := "c:/000.avi"
-	dstFile := "D:/000.avi"
-	err := CopyFile(dstFile, srcFile)
-	if err == nil {
-		fmt.Printf("拷贝完成\n")
-	} else {
-		fmt.Printf("拷贝错误 err=%v\n", err)
-	}
+	router := gin.Default()
+	router.GET("/addUser", func(c *gin.Context) {
+		c.HTML(200, "default/add_user.html", gin.H{})
+	})
+	router.POST("/doAddUser", func(c *gin.Context) {
+		username := c.PostForm("username")
+		password := c.PostForm("password")
+		age := c.DefaultPostForm("age", "20")
+		c.JSON(200, gin.H{"usernmae": username, "password": password, "age": age})
+	})
 }
