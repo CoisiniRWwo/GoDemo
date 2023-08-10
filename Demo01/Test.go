@@ -1,13 +1,13 @@
-package main
+package models
 
-import (
-	"fmt"
-	"github.com/gin-gonic/gin"
-)
+type User struct { // 默认表名是 `users`
+	Id       int
+	Username string
+	Age      int
+	Email    string
+	AddTime  int
+}
 
-func InitAdminMiddleware(ctx *gin.Context) {
-	fmt.Println("路由分组中间件")
-	// 可以通过 ctx.Set 在请求上下文中设置值，后续的处理函数能够取到该值ctx.Set("username", "张三")
-	// 调用该请求的剩余处理程序
-	ctx.Next()
+func (User) TableName() string {
+	return "user"
 }
